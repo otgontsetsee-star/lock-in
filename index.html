@@ -467,9 +467,20 @@ async function notify(b){try{if(!("Notification" in window)||Notification.permis
   const opt={body:b.why||"Цаг боллоо",icon:"icon-192.png?v=3",badge:"icon-192.png?v=3",tag:"lockin-"+b.id,renotify:true,requireInteraction:true,vibrate:[500,200,500,200,500],silent:false};
   r?r.showNotification("⏰ "+fromMin(b.t)+" · "+b.name,opt):new Notification("⏰ "+fromMin(b.t)+" · "+b.name,opt)}catch(e){}}
 function soundOn(){try{return localStorage.getItem("li_sound")==="1"}catch(e){return false}}
+const VAPID_PUB="BFG14P4JpcK7RupqMPNDXwAt-_NEZ8H_wjbbX6fkBZOb1z_MbZnuoWB3V9YOeKsWqr4ulEqfX0sPncsmRxzpUEA";
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+async function setupPush(){try{if(!("PushManager" in window)||Notification.permission!=="granted")return;const r=await navigator.serviceWorker.ready;
+  let sub=await r.pushManager.getSubscription();if(!sub){const raw=atob(VAPID_PUB.replace(/-/g,"+").replace(/_/g,"/")),key=Uint8Array.from(raw,c=>c.charCodeAt(0));sub=await r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:key})}
+  const code="LOCKIN:"+btoa(JSON.stringify({s:sub.toJSON(),start:state.start}));if(ls("li_pushcode")!==code){ls("li_pushcode",code);ls("li_pushsent","0")}}catch(e){ls("li_pusherr",String(e))}}
 async function enableSound(){try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();await actx.resume()}catch(e){}chime();
   try{if("Notification" in window&&Notification.permission==="default")await Notification.requestPermission()}catch(e){}
-  try{localStorage.setItem("li_sound","1")}catch(e){}render()}
+  ls("li_sound","1");await Promise.race([setupPush(),new Promise(r=>setTimeout(r,8000))]);render();setTimeout(render,4000)}
+function pushBox(){const code=ls("li_pushcode");if(!code||ls("li_pushsent")==="1")return null;
+  return h("section",{class:"box",id:"pushbox"},h("div",{class:"k"},"НЭГ УДАА · ХААЛТТАЙ ҮЕД Ч ДУУГАРАХ"),
+    h("p",{},"Доорх кодыг хуулаад Claude руу явуул. Тэгвэл апп хаалттай байсан ч сануулга дуутай ирнэ."),
+    h("textarea",{readonly:"",style:"width:100%;height:64px;font:11px JetBrains Mono,monospace;border-radius:12px;padding:8px;border:1px solid var(--rule);background:var(--tint);color:var(--ink)"},code),
+    h("div",{class:"btns"},h("button",{class:"btn s",id:"pcopy",onclick:async()=>{try{await navigator.clipboard.writeText(code);toast("Хуулагдлаа")}catch(e){document.querySelector("#pushbox textarea").select()}}},"Код хуулах"),
+      h("button",{class:"btn",id:"psent",onclick:()=>{ls("li_pushsent","1");render()}},"Явуулсан")))}
 function showAlarm(b,k){const o=OV();if(!o.hidden)return;o.hidden=false;startAlarm();notify(b);
   o.replaceChildren(h("div",{class:"ov"},h("div",{class:"k"},"ЦАГ БОЛЛОО · "+fromMin(b.t)),h("h2",{},b.name),b.why?h("p",{},b.why):null,
     h("div",{class:"btns",style:"justify-content:center"},
@@ -663,7 +674,8 @@ function viewToday(){const k=todayKey(),d=getDay(k),bs=blocks(k),n=nowBlock(bs,d
   const na=nextAlarm(bs,d);
   if(na){const mins=na.t-nowMin();out.push(h("div",{class:"alarm"},h("span",{class:"bell"},"САНУУЛГА"),
     h("div",{},h("strong",{},fromMin(na.t)+" · "+na.name),h("small",{},"Апп нээлттэй байхад дуугарна")),h("span",{class:"in"},mins>=60?Math.floor(mins/60)+"ц "+mins%60+"м":mins+"м")))}
-  if(!soundOn())out.push(h("button",{class:"btn s",id:"snd",style:"width:100%;margin-bottom:12px",onclick:enableSound},"🔔 Дуут сануулга асаах"));
+  {const pb=pushBox();if(pb)out.push(pb)}
+  if(!soundOn()||(!ls("li_pushcode")&&"PushManager" in window))out.push(h("button",{class:"btn s",id:"snd",style:"width:100%;margin-bottom:12px",onclick:enableSound},soundOn()?"🔔 Хаалттай үед ч дуугаргах":"🔔 Дуут сануулга асаах"));
   if(n){const b=n.b;
     if(b.reward)out.push(h("section",{class:"box now"+(lk?"":" calm")},h("div",{class:"k"},lk?"ТҮГЖЭЭТЭЙ":"НЭЭЛТТЭЙ"),h("h2",{},lk?"Кино түгжээтэй":"Кино, тоглоом таных"),h("p",{},lk?"LOCK IN дутуу байна. Эхлээд нөх.":"Чи үүнийг олж авлаа."),
       lk?h("div",{class:"btns"},h("button",{class:"btn i",id:"fix",onclick:()=>openLock(bs.find(x=>x.lock&&!d.done[x.id]))},"Одоо нөхөх")):null));

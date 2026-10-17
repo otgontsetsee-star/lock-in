@@ -1,0 +1,29 @@
+name: Lock In alarms
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: lockin-push
+  cancel-in-progress: false
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-save web-push@3.6.7
+      - run: node scripts/push.mjs
+        env:
+          VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
+      - name: Save sent log
+        run: |
+          if ! git diff --quiet push/sent.json 2>/dev/null || [ -n "$(git status --porcelain push/sent.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add push/sent.json && git commit -m "push log" && git push
+          fi
