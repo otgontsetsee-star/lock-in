@@ -41,6 +41,10 @@
 .td .row{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:transform .18s ease;background:var(--paper);position:relative}
 .td .row.drag{transition:none;z-index:5;box-shadow:0 10px 28px rgba(0,0,0,.18);border-radius:16px;border-bottom-color:transparent}
 .td .tmb.fxd{opacity:.75}
+
+.td .replan{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px;font-weight:700;color:var(--soft);margin:8px 0 2px}
+.td .replan .tmb{padding:4px 8px;font-size:13px}
+.td .replan #rpgo{border:0;border-radius:99px;background:var(--ink);color:var(--paper);font-weight:800;font-size:12.5px;padding:6px 12px}
 </style>
 </head><body>
 <title>Lock In</title>
@@ -715,7 +719,7 @@ function viewTC(){if(!tc)return h("div",{class:"tc"},h("div",{class:"k"},"Trade 
 const GC={"LOCK IN":"var(--butter)","Бясалгал":"var(--lav)","Бие":"var(--sage)","Гэр":"var(--blush)","Шагнал":"var(--mint)","Ухаан":"#F3E3B5","Жижиг ажил":"var(--rule)"};
 let drag=null,dragJust=false;
 document.addEventListener("touchmove",e=>{if(drag&&drag.on)e.preventDefault()},{passive:false});
-function setTime(k,b,m){const dd=getDay(k);if(b.extra){const x=(dd.extras||[]).find(y=>y.id===b.xid);if(x)x.t=m}else(dd.tm||={})[b.id]=m;saveDay(dd);rung.delete(k+b.id)}
+function setTime(k,b,m){if(b.lock){const sl=blocks(k).find(x=>x.id==="sleep");if(sl&&m+(b.dur||0)>sl.t){m=Math.max(0,sl.t-(b.dur||0));toast("Trade-ийг маргааш руу хойшлуулахгүй · "+fromMin(m))}}const dd=getDay(k);if(b.extra){const x=(dd.extras||[]).find(y=>y.id===b.xid);if(x)x.t=m}else(dd.tm||={})[b.id]=m;saveDay(dd);rung.delete(k+b.id)}
 function dragInit(r,b,k){r.addEventListener("pointerdown",e=>{if(e.button>0||e.target.closest(".tmb,.ck2,.rm"))return;
   const tmr=setTimeout(()=>{if(!drag)return;drag.on=true;r.classList.add("drag");try{navigator.vibrate?.(15)}catch(x){}
     const rows=[...r.parentNode.querySelectorAll(".row")];drag.rows=rows;drag.i0=rows.indexOf(r);drag.rect=r.getBoundingClientRect();drag.hgt=drag.rect.height;drag.mids=rows.map(x=>{const q=x.getBoundingClientRect();return q.top+q.height/2});drag.idx=drag.i0},300);
@@ -729,8 +733,14 @@ function dragEnd(){if(!drag)return;clearTimeout(drag.tmr);const g=drag;drag=null
   g.rows.forEach(x=>{x.style.transform=""});g.r.classList.remove("drag");if(g.idx===g.i0){render();return}
   const bs=blocks(g.k).filter(x=>x.id!==g.b.id),prev=bs[g.idx-1],next=bs[g.idx],len=b=>Math.max(15,b.dur||20),r5=m=>Math.round(m/5)*5;
   let t=!prev?next.t-len(g.b):!next?prev.t+len(prev):(prev.t+len(prev)<=next.t-5?prev.t+len(prev):r5((prev.t+next.t)/2));
-  t=r5(Math.max(0,t));setTime(g.k,g.b,t);toast(g.b.name+" → "+fromMin(t));render()}
+  t=r5(Math.max(0,t));setTime(g.k,g.b,t);if(!g.b.lock)toast(g.b.name+" → "+fromMin(t));render()}
 document.addEventListener("pointermove",dragMove,{passive:false});document.addEventListener("pointerup",dragEnd);document.addEventListener("pointercancel",()=>{if(drag&&!drag.on){clearTimeout(drag.tmr);drag=null}});
+function replan(k,start){const bs=blocks(k),d=getDay(k);let cur=start;const sl=bs.find(x=>x.id==="sleep"),rw=bs.find(x=>x.reward);
+  const todo=bs.filter(b=>!d.done[b.id]&&!b.reward&&b.id!=="sleep"&&b.id!=="wake");
+  const tm={...(d.tm||{})},ex=(d.extras||[]).map(x=>({...x}));
+  for(const b of todo){if(b.extra){const x=ex.find(y=>y.id===b.xid);if(x)x.t=cur}else tm[b.id]=cur;cur+=Math.max(15,b.dur||(b.id==="food"?30:20))+5;cur=Math.ceil(cur/5)*5}
+  if(rw&&!d.done[rw.id])tm[rw.id]=Math.max(rw.t,cur);if(sl&&sl.t<cur)tm.sleep=cur;
+  const dd=getDay(k);dd.tm=tm;dd.extras=ex;saveDay(dd);rung.clear();toast("Үлдсэн ажлууд "+fromMin(start)+"-аас эхэллээ");render()}
 function slotNow(){const n=nowMin()+30;return fromMin(Math.min(toMin("23:30"),Math.ceil(n/30)*30))}
 function viewToday(){const k=todayKey(),d=getDay(k),bs=blocks(k),n=nowBlock(bs,d),lk=locksLeft(bs,d),out=[];
   {const pb=pushBox();if(pb)out.push(pb)}
@@ -748,23 +758,26 @@ function viewToday(){const k=todayKey(),d=getDay(k),bs=blocks(k),n=nowBlock(bs,d
   const row=b=>{const done=!!d.done[b.id];
     const ti=h("input",{type:"time",class:"tmi",id:"tm-"+b.id,value:fromMin(b.t),"aria-label":"Цаг өөрчлөх: "+b.name});
     ti.addEventListener("change",()=>{if(!ti.value)return;let m=toMin(ti.value);if(b.id!=="wake"&&m<wakeMin(k)-60)m+=1440;ti.blur();
-      setTime(k,b,m);toast("Цаг өөрчлөгдлөө · "+fromMin(m));render()});
-    const r=h("div",{class:"row"+(done?" done":"")+(n&&n.b===b?" cur":"")+(isLate(b,d)?" lt":"")+(b.lock?" fx":""),"data-id":b.id},
+      setTime(k,b,m);if(!b.lock)toast("Цаг өөрчлөгдлөө · "+fromMin(m));render()});
+    const r=h("div",{class:"row"+(done?" done":"")+(n&&n.b===b?" cur":"")+(isLate(b,d)?" lt":"")+"","data-id":b.id},
       h("button",{class:"ic",style:"background:"+(GC[b.g]||"var(--tint)"),id:"ic-"+b.id,"aria-label":b.name,onclick:()=>{if(dragJust)return;if(b.lock||b.med)openLock(b)}},b.ic||"•"),
-      h("div",{class:"tx"},h("b",{},b.name),h("small",{},[b.g,b.why,b.lock?"🔒 тогтмол":null,b.moved?"цаг өөрчилсөн":null,b.reward?(lk?"🔒 түгжээтэй":"нээлттэй"):null].filter(Boolean).join(" · "))),
-      b.lock?h("span",{class:"tmb fxd"},fromMin(b.t)):h("label",{class:"tmb"},fromMin(b.t),ti),
+      h("div",{class:"tx"},h("b",{},b.name),h("small",{},[b.g,b.why,b.lock?"өнөөдөр заавал":null,b.moved?"цаг өөрчилсөн":null,b.reward?(lk?"🔒 түгжээтэй":"нээлттэй"):null].filter(Boolean).join(" · "))),
+      h("label",{class:"tmb"},fromMin(b.t),ti),
       b.reward?h("span",{class:"ck2 off"}):h("button",{class:"ck2",id:"ck-"+b.id,"aria-label":(done?"Болиулах: ":"Хийсэн: ")+b.name,onclick:()=>toggle(b.id)},done?"✓":""),
       b.extra?h("button",{class:"rm",id:"rm-"+b.xid,"aria-label":"Устгах",onclick:()=>{const dd=getDay(k);dd.extras=(dd.extras||[]).filter(y=>y.id!==b.xid);saveDay(dd);render()}},"×"):null);
-    if(!b.lock)dragInit(r,b,k);return r};
+    dragInit(r,b,k);return r};
   const inp=h("input",{type:"text",id:"exin",placeholder:"Жижиг ажил нэмэх…",enterkeyhint:"done"}),tIn=h("input",{type:"time",class:"tmi",id:"exti",value:slotNow(),"aria-label":"Цаг"}),tLb=h("label",{class:"tmb"},tIn.value,tIn);tIn.addEventListener("change",()=>{tLb.firstChild.textContent=tIn.value||"--:--"});
   const add=()=>{const v=inp.value.trim();if(!v){inp.focus();return}inp.value="";inp.blur();let m=toMin(tIn.value||"14:00");if(m<wakeMin(k)-60)m+=1440;const dd=getDay(k);(dd.extras||=[]).push({id:uid(),title:v,t:m});saveDay(dd);render()};
   inp.addEventListener("keydown",e=>{if(e.key==="Enter")add()});
   out.push(h("section",{class:"list"},
     h("div",{class:"lh"},h("h3",{},"Өнөөдөр"),h("span",{},dot(k))),
+    (()=>{const ri=h("input",{type:"time",class:"tmi",id:"rpti",value:slotNow(),"aria-label":"Эхлэх цаг"}),rl=h("label",{class:"tmb"},ri.value,ri);
+      ri.addEventListener("change",()=>{rl.firstChild.textContent=ri.value||"--:--"});
+      return h("div",{class:"replan"},h("span",{},"Үлдсэнийг"),rl,h("span",{},"-аас"),h("button",{id:"rpgo",onclick:()=>{let m=toMin(ri.value||slotNow());if(m<wakeMin(k)-60)m+=1440;ri.blur();replan(k,m)}},"дахин эхлүүлэх"))})(),
     h("div",{class:"bar"},bs.filter(b=>!b.reward).map(b=>h("i",{style:"background:"+(GC[b.g]||"var(--tint)")+(d.done[b.id]?"":";filter:saturate(.5);opacity:.45")}))),
     ...bs.map(row),
     h("div",{class:"addrow"},inp,tLb,h("button",{id:"exadd","aria-label":"Нэмэх",onclick:add},"+"))));
-  out.push(h("p",{class:"hint2"},"Удаан дараад дээш доош чирнэ · цаг дээр дарж өөрчилнө · 🔒 trade-ийн цаг тогтмол"));
+  out.push(h("p",{class:"hint2"},"Удаан дараад чирнэ · цаг дээр дарж өөрчилнө · trade-ийг маргааш руу хойшлуулахгүй"));
   return[h("div",{class:"td"},...out)]}
 
 function render(){if(!state||(drag&&drag.on))return;const a=document.activeElement;if(a&&a.tagName==="INPUT"&&a.value)return;
