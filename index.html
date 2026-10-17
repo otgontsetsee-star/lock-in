@@ -441,6 +441,7 @@ function baseBlocks(k){const p=curPhase(),w=wakeMin(k),bed=w+17*60,ex=(w+80<=toM
     {id:"med2",ic:"🧘",g:"Бясалгал",t:toMin("15:00"),dur:60,name:"Бясалгал 2/3",why:"1 цаг",must:true,med:true},
     {id:"market",ic:"📈",g:"LOCK IN",t:toMin("16:00"),dur:120,name:market,why:"London · 2 цаг",must:true,lock:true},
     {id:"clean",ic:"🧹",g:"Гэр",t:toMin("18:15"),name:"Гэр цэвэрлэх",why:"20 мин",must:true},
+    {id:"read",ic:"📖",g:"Ухаан",t:toMin("19:00"),dur:30,name:"Ном унших",why:"20 хуудас",must:true},
     {id:"reward",ic:"🎬",g:"Шагнал",t:toMin("20:00"),dur:120,name:"Кино, тоглоом",why:"2 LOCK IN-ий дараа",reward:true},
     {id:"med3",ic:"🧘",g:"Бясалгал",t:bed-60,dur:60,name:"Бясалгал 3/3",why:"1 цаг",must:true,med:true},
     {id:"sleep",ic:"🌙",g:"Бие",t:bed,name:"Унтах",why:"7 цаг нойр",must:true}
@@ -635,7 +636,7 @@ function sheetGoal(){const rows=[["Одоо",100,10,"$10"],["Өөрийн дан
     h("div",{class:"sh-note"},"Мэргэжлийн трейдерүүд сард ",h("b",{},"2–5%")," олдог. Тиймээс $2,500 хүрэх гол түлхүүр бол ",h("b",{},"том данс"),", харин том данс авах түлхүүр бол ",h("b",{},"батлагдсан арга барил ба сахилга"),".")]}
 function sheetPlan(){const ph=[["10.17 – 11.15","Арга сурах","SiriusFx-ийн 29 бичлэг, өдөрт 1. Дүрмээ 1 хуудсанд бичнэ."],["11.16 – 12.20","Арга батлах ★","100 backtest + 20 demo trade. Дүрэм 90%+. Энэ бол DEADLINE."],["12.21 – 03.31","Жинхэнэ данс","$100 данс, trade бүрт 1% эрсдэл, 60 trade."],["04.01 – 09.30","Өсгөх","Анхны $1000 ашиг. Том данс авах бэлтгэл."],["2027 оны сүүл","$2,500/сар","Том дансаар сард 2.5%. 3 сар дараалан."]];
   return[h("div",{class:"sh-big"},h("b",{},"5")," шат, 1 чиглэл"),h("div",{class:"sh-tl"},ph.map((p,i)=>h("div",{class:"sh-tli"+(i===1?" key":"")},h("i"),h("div",{},h("span",{},p[0]),h("b",{},p[1]),h("p",{},p[2])))))]}
-function sheetStrategy(){const blocks=[[7,7.15,"Бос","var(--sage)"],[7.17,8.17,"Бясалгал","var(--lav)"],[8.33,8.67,"Дасгал","var(--sage)"],[11,13,"LOCK IN · сурах","#F5C531"],[13.5,14,"Хоол","var(--blush)"],[15,16,"Бясалгал","var(--lav)"],[16,18,"LOCK IN · зах","#F5C531"],[18.25,18.6,"Цэвэрлэх","var(--blush)"],[20,22,"Кино","var(--mint)"],[23,24,"Бясалгал","var(--lav)"]];
+function sheetStrategy(){const blocks=[[7,7.15,"Бос","var(--sage)"],[7.17,8.17,"Бясалгал","var(--lav)"],[8.33,8.67,"Дасгал","var(--sage)"],[11,13,"LOCK IN · сурах","#F5C531"],[13.5,14,"Хоол","var(--blush)"],[15,16,"Бясалгал","var(--lav)"],[16,18,"LOCK IN · зах","#F5C531"],[18.25,18.6,"Цэвэрлэх","var(--blush)"],[19,19.5,"Ном","#F3E3B5"],[20,22,"Кино","var(--mint)"],[23,24,"Бясалгал","var(--lav)"]];
   const X=t=>20+(t-7)/17*280;
   const fig=`<svg viewBox="0 0 320 92"><rect x="20" y="22" width="280" height="30" rx="8" fill="var(--tint)"/>${blocks.map(b=>`<rect x="${X(b[0]).toFixed(1)}" y="22" width="${(X(b[1])-X(b[0])).toFixed(1)}" height="30" rx="5" fill="${b[3]}"/>`).join("")}
    ${[7,11,13,16,18,20,24].map(t=>`<text x="${X(t).toFixed(1)}" y="68" text-anchor="middle" font-family="Manrope,sans-serif" font-size="8.5" font-weight="700" fill="var(--soft)">${String(t%24).padStart(2,"0")}:00</text>`).join("")}
@@ -707,7 +708,7 @@ function viewTC(){if(!tc)return h("div",{class:"tc"},h("div",{class:"k"},"Trade 
     h("div",{class:"dsc"},h("div",{},h("b",{class:(w.okPct!=null&&w.okPct<90)?"bad":""},pc(w.okPct)),h("span",{},"Дүрэм · 7 хоног")),h("div",{},h("b",{},w.trades||0),h("span",{},"Trade · 7 хоног")),h("div",{},h("b",{class:(a.okPct!=null&&a.okPct<90)?"bad":""},pc(a.okPct)),h("span",{},"Дүрэм · нийт"))),
     tc.verdict?h("p",{class:"verdict"},tc.verdict):null)}
 /* ---------- screen: ӨНӨӨДӨР ---------- */
-const GC={"LOCK IN":"var(--butter)","Бясалгал":"var(--lav)","Бие":"var(--sage)","Гэр":"var(--blush)","Шагнал":"var(--mint)","Жижиг ажил":"var(--rule)"};
+const GC={"LOCK IN":"var(--butter)","Бясалгал":"var(--lav)","Бие":"var(--sage)","Гэр":"var(--blush)","Шагнал":"var(--mint)","Ухаан":"#F3E3B5","Жижиг ажил":"var(--rule)"};
 function slotNow(){const n=nowMin()+30;return fromMin(Math.min(toMin("23:30"),Math.ceil(n/30)*30))}
 function viewToday(){const k=todayKey(),d=getDay(k),bs=blocks(k),n=nowBlock(bs,d),lk=locksLeft(bs,d),out=[];
   {const pb=pushBox();if(pb)out.push(pb)}
