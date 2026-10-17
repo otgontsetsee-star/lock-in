@@ -33,8 +33,13 @@ function blocks(start, k) {
 }
 const tag = s => s.s.endpoint.slice(-16);
 const keep = new Set([today, yest]);
-for (const k of Object.keys(sent)) if (!keep.has(k.split("|")[1])) delete sent[k];
+for (const k of Object.keys(sent)) if (!k.includes("|test") && !keep.has(k.split("|")[1])) delete sent[k];
 let n = 0;
+for (const s of subs) if (s.test) { const k = tag(s) + "|test";
+  if (!Object.keys(sent).some(x => x.startsWith(tag(s) + "|test"))) {
+    try { await webpush.sendNotification(s.s, JSON.stringify({ title: "✅ Lock In холбогдлоо", body: "Апп хаалттай байсан ч сануулга ингэж дуутай ирнэ.", tag: "lockin-test" }), { TTL: 3600, urgency: "high" }); console.log("test sent"); }
+    catch (e) { console.log("test fail", e.statusCode, e.body); }
+    sent[k + "|" + today] = 1; n++; } }
 for (const s of subs) {
   for (const [day, off] of [[today, 0], [yest, 1440]]) {
     for (const [id, t, title, body] of blocks(s.start || "2026-10-17", day)) {
