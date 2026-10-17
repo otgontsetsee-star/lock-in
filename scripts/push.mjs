@@ -35,24 +35,26 @@ const tag = s => s.s.endpoint.slice(-16);
 const keep = new Set([today, yest]);
 for (const k of Object.keys(sent)) if (!k.includes("|test") && !keep.has(k.split("|")[1])) delete sent[k];
 let n = 0;
-for (const s of subs) if (s.test) { const k = tag(s) + "|test";
-  if (!Object.keys(sent).some(x => x.startsWith(tag(s) + "|test"))) {
-    try { await webpush.sendNotification(s.s, JSON.stringify({ title: "✅ Lock In холбогдлоо", body: "Апп хаалттай байсан ч сануулга ингэж дуутай ирнэ.", tag: "lockin-test" }), { TTL: 3600, urgency: "high" }); console.log("test sent"); }
-    catch (e) { console.log("test fail", e.statusCode, e.body); }
-    sent[k + "|" + today] = 1; n++; } }
-for (const s of subs) {
-  for (const [day, off] of [[today, 0], [yest, 1440]]) {
-    for (const [id, t, title, body] of blocks(s.start || "2026-10-17", day)) {
-      const rel = t - off, k = tag(s) + "|" + day + "|" + id;
-      if (nowMin >= rel && nowMin <= rel + WINDOW && !sent[k]) {
-        try {
-          await webpush.sendNotification(s.s, JSON.stringify({ title: "⏰ " + hhmm(t) + " · " + title, body, tag: "lockin-" + id }), { TTL: 1800, urgency: "high" });
-          console.log("sent", k);
-        } catch (e) { console.log("fail", k, e.statusCode, e.body); }
-        sent[k] = 1; n++;
-      }
-    }
+const send = async (s, k, payload) => {
+  try { await webpush.sendNotification(s.s, JSON.stringify(payload), { TTL: 1800, urgency: "high" }); console.log("sent", k); }
+  catch (e) { console.log("fail", k, e.statusCode, e.body); }
+  sent[k] = 1; n++; fs.writeFileSync(SENT, JSON.stringify(sent));
+};
+for (const s of subs) if (s.test && !Object.keys(sent).some(x => x.startsWith(tag(s) + "|test")))
+  await send(s, tag(s) + "|test|" + today, { title: "✅ Lock In холбогдлоо", body: "Апп хаалттай байсан ч сануулга ингэж дуутай ирнэ.", tag: "lockin-test" });
+// collect alarms from 40 min ago up to 31 min ahead (runs every 30 min, sleeps until exact time)
+const due = [];
+for (const s of subs) for (const [day, off] of [[today, 0], [yest, 1440]])
+  for (const [id, t, title, body] of blocks(s.start || "2026-10-17", day)) {
+    const rel = t - off, k = tag(s) + "|" + day + "|" + id;
+    if (rel >= nowMin - 40 && rel <= nowMin + 31 && !sent[k]) due.push({ s, k, rel, payload: { title: "⏰ " + hhmm(t) + " · " + title, body, tag: "lockin-" + id } });
   }
+due.sort((a, b) => a.rel - b.rel);
+const startMs = Date.now(), startMin = nowMin + (ub.getUTCSeconds() / 60);
+for (const d of due) {
+  const wait = (d.rel - startMin) * 60e3 - (Date.now() - startMs);
+  if (wait > 0) { console.log("waiting", Math.round(wait / 1e3), "s for", d.k); await new Promise(r => setTimeout(r, wait)); }
+  await send(d.s, d.k, d.payload);
 }
 fs.writeFileSync(SENT, JSON.stringify(sent));
 console.log("now", today, hhmm(nowMin), "sent", n);

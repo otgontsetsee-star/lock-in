@@ -1,7 +1,7 @@
 name: Lock In alarms
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "17,47 * * * *"
   workflow_dispatch:
 permissions:
   contents: write
@@ -11,6 +11,7 @@ concurrency:
 jobs:
   push:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,8 +23,8 @@ jobs:
           VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
       - name: Save sent log
         run: |
-          if ! git diff --quiet push/sent.json 2>/dev/null || [ -n "$(git status --porcelain push/sent.json)" ]; then
+          if [ -n "$(git status --porcelain push/sent.json)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add push/sent.json && git commit -m "push log" && git push
+            git add push/sent.json && git commit -m "push log" && git pull --rebase && git push
           fi

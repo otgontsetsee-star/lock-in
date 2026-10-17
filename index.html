@@ -1,5 +1,5 @@
 <!doctype html><html lang="mn"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#ECEBE7">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Lock In">
@@ -34,7 +34,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15p
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   padding-block:18px calc(104px + env(safe-area-inset-bottom,0px))}
 .wrap{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-button,input{font:inherit;color:inherit}button{cursor:pointer}
+button,input{font:inherit;color:inherit}html,body{touch-action:manipulation;-webkit-text-size-adjust:100%}input,textarea,select{font-size:16px!important}button{cursor:pointer}
 :focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .k{font-size:12px;font-weight:600;color:var(--soft)}
@@ -673,7 +673,7 @@ function viewTC(){if(!tc)return h("div",{class:"tc"},h("div",{class:"k"},"Trade 
 function viewToday(){const k=todayKey(),d=getDay(k),bs=blocks(k),n=nowBlock(bs,d),lk=locksLeft(bs,d),out=[];
   const na=nextAlarm(bs,d);
   if(na){const mins=na.t-nowMin();out.push(h("div",{class:"alarm"},h("span",{class:"bell"},"САНУУЛГА"),
-    h("div",{},h("strong",{},fromMin(na.t)+" · "+na.name),h("small",{},"Апп нээлттэй байхад дуугарна")),h("span",{class:"in"},mins>=60?Math.floor(mins/60)+"ц "+mins%60+"м":mins+"м")))}
+    h("div",{},h("strong",{},fromMin(na.t)+" · "+na.name),h("small",{},ls("li_pushcode")?"Апп хаалттай байсан ч мэдэгдэл ирнэ":"Апп нээлттэй байхад дуугарна")),h("span",{class:"in"},mins>=60?Math.floor(mins/60)+"ц "+mins%60+"м":mins+"м")))}
   {const pb=pushBox();if(pb)out.push(pb)}
   if(!soundOn()||(!ls("li_pushcode")&&"PushManager" in window))out.push(h("button",{class:"btn s",id:"snd",style:"width:100%;margin-bottom:12px",onclick:enableSound},soundOn()?"🔔 Хаалттай үед ч дуугаргах":"🔔 Дуут сануулга асаах"));
   if(n){const b=n.b;
