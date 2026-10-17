@@ -4,7 +4,40 @@
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Lock In">
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=3"><link rel="icon" href="icon-192.png">
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;-webkit-tap-highlight-color:transparent}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;-webkit-tap-highlight-color:transparent}img{max-width:100%}[hidden]{display:none!important}
+.td .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:2px 0 10px}
+.td .stc{background:var(--paper);border-radius:20px;padding:12px 14px 14px}
+.td .stc .l{font-size:12px;font-weight:700;color:var(--soft)}
+.td .stc b{display:block;font-size:24px;font-weight:800;margin:2px 0 8px;letter-spacing:-.02em}.td .stc b em{font-style:normal;font-size:14px;color:var(--soft);font-weight:700}
+.td .seg{display:flex;gap:3px}.td .seg i{flex:1;height:7px;border-radius:3px;background:var(--rule)}.td .seg i.on{background:#3E6BF0}.td .seg.y i.on{background:#E0A81C}
+.td .nowbar{display:flex;align-items:center;gap:12px;background:var(--ink);color:var(--paper);border-radius:20px;padding:10px 10px 10px 12px;margin-bottom:10px}
+.td .nowbar.late{background:var(--sig)}
+.td .nowbar .ic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:17px;flex:none}
+.td .nowbar .tx{flex:1;min-width:0}.td .nowbar small{display:block;font-size:11px;font-weight:700;opacity:.65}.td .nowbar b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.td .nowbar .go{border:0;border-radius:99px;background:var(--paper);color:var(--ink);font-weight:800;font-size:13px;padding:9px 14px;flex:none}
+.td .list{background:var(--paper);border-radius:24px;padding:16px 14px 8px;margin-bottom:8px}
+.td .list .lh{display:flex;align-items:baseline;justify-content:space-between}.td .list h3{margin:0;font-family:Manrope,sans-serif;font-size:20px;font-weight:800;letter-spacing:-.01em;text-transform:none}.td .list .lh span{font-size:12px;color:var(--soft);font-weight:700}
+.td .list .bar{display:flex;gap:2px;margin:10px 0 6px}.td .list .bar i{flex:1;height:6px;border-radius:2px}
+.td .row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--tint)}
+.td .row:last-of-type{border-bottom:0}
+.td .row .ic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:17px;flex:none;border:0;padding:0}
+.td .row .tx{flex:1;min-width:0}.td .row .tx b{display:block;font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.td .row .tx small{display:block;font-size:11.5px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.td .tm2{-webkit-appearance:none;appearance:none;border:0;background:var(--tint);border-radius:10px;padding:5px 6px;font-family:Manrope,sans-serif;font-weight:800;font-size:16px!important;color:var(--ink);width:78px;text-align:center;flex:none;min-height:0}
+.td .tm2::-webkit-date-and-time-value{text-align:center}.td .tm2::-webkit-calendar-picker-indicator{display:none}
+.td .ck2{width:28px;height:28px;border-radius:50%;border:2px solid var(--rule);background:transparent;color:var(--paper);font-weight:900;font-size:14px;flex:none;display:grid;place-items:center;padding:0}
+.td .ck2.off{border-style:dashed;opacity:.5}
+.td .row.done .ck2{background:var(--ink);border-color:var(--ink)}.td .row.done .tx b{text-decoration:line-through;opacity:.45}.td .row.done .ic{opacity:.5}
+.td .row.cur .tx b{color:var(--sig)}.td .row.lt .tmb{background:#F8DDD4;color:var(--sig)}
+.td .row .rm{border:0;background:none;color:var(--soft);font-size:18px;padding:0 2px;flex:none}
+.td .addrow{display:flex;gap:8px;align-items:center;padding:10px 0 6px}.td .addrow input[type=text]{flex:1;min-width:0;background:var(--tint);border:0;border-radius:99px;padding:9px 14px}
+.td .addrow #exadd{width:36px;height:36px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);font-size:20px;font-weight:700;flex:none}
+.td .hint2{text-align:center;font-size:11.5px;color:var(--soft);margin:4px 0 90px}
+.td .row.pop .ck2,.td .ck2.pop{animation:pop .35s ease}
+
+.td .tmb{position:relative;display:inline-grid;place-items:center;background:var(--tint);border-radius:10px;padding:6px 9px;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums;flex:none;overflow:hidden}
+.td .tmi{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;-webkit-appearance:none;appearance:none}
+.td .row.lt .tmb{background:#F8DDD4;color:var(--sig)}
+</style>
 </head><body>
 <title>Lock In</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -396,22 +429,26 @@ function quotas(i){const c=state.c,dl=Math.max(1,dayDiff(todayKey(),PHASES[i].en
 /* daily schedule */
 function wakeMin(k){const w=Math.max(0,Math.floor(dayDiff(state.start,k)/7));return Math.max(toMin("07:00"),toMin("09:30")-w*15)}
 function nextLesson(){const n=(state.c.lessons||0)+1;return n<=4?"Анхан шат "+n+"/4":n===5?"Bootcamp":n<=29?"Webinar "+(n-5)+"/24":"Бүгд үзсэн"}
-function blocks(k){const p=curPhase(),w=wakeMin(k);
-  const study=["SiriusFx · "+nextLesson()+" · тэмдэглэлтэй","Backtest хийх","Trade-ээ дүгнэж journal бичих","Journal, дүн шинжилгээ"][p];
-  const market=["Чарт дээр хичээлийн setup хайх","Demo дээр дүрмээрээ trade хийх","$100 данс · 1% эрсдэл","Дүрмээрээ trade хийх"][p];
+function baseBlocks(k){const p=curPhase(),w=wakeMin(k),bed=w+17*60,ex=(w+80<=toMin("10:40"))?w+80:toMin("13:00");
+  const study=["SiriusFx · "+nextLesson(),"Backtest хийх","Trade-ээ дүгнэх, journal","Journal, дүн шинжилгээ"][p];
+  const market=["Чарт дээр setup хайх","Demo дээр дүрмээрээ trade","$100 данс · 1% эрсдэл","Дүрмээрээ trade хийх"][p];
   return[
-    {id:"wake",g:"БИЕ",t:w,name:"Босох · ор засах",why:"Тогтмол нойр = тунгалаг шийдвэр",must:true},
-    {id:"move",g:"БИЕ",t:Math.max(w+30,toMin("09:00")),name:"Дасгал 20 мин",why:"Хүчтэй бие стресс даана",must:true},
-    {id:"study",g:"LOCK IN",t:toMin("11:00"),dur:120,name:study,why:"2 цаг · арга барилаа сурах",must:true,lock:true},
-    {id:"food",g:"БИЕ",t:toMin("13:00"),name:"Өөрөө хоол хийж идэх",why:"Тогтвортой энерги",must:true},
-    {id:"small",g:"АЖИЛ",t:toMin("14:00"),name:"Жижиг ажлын цонх · 1 цаг",why:"Гэнэтийн ажлуудаа энд нэм",small:true,dur:60},
-    {id:"clean",g:"ГЭР",t:toMin("15:15"),name:"Гэрээ цэвэрлэх 20 мин",why:"Цэвэр орчин = төвлөрөл",must:true},
-    {id:"market",g:"LOCK IN",t:toMin("16:00"),dur:120,name:market,why:"2 цаг · London нээлт, алт хөдөлнө",must:true,lock:true},
-    {id:"read",g:"УХААН",t:toMin("19:00"),name:"Ном 20 хуудас",why:"Тайван ухаан = FOMO-гүй",must:true},
-    {id:"med",g:"УХААН",t:toMin("19:40"),dur:10,name:"Бясалгал 10 мин",why:"Таймер дуусахад автоматаар ✓",must:true,med:true},
-    {id:"reward",g:"ШАГНАЛ",t:toMin("20:00"),name:"Кино эсвэл тоглоом",why:"2 цаг",reward:true,dur:120},
-    {id:"sleep",g:"БИЕ",t:w+16*60,name:"Унтах · утас өөр өрөөнд",why:"Маргаашийн трейд эндээс эхэлнэ",must:true}
+    {id:"wake",ic:"☀️",g:"Бие",t:w,name:"Босох",why:"ор засах",must:true},
+    {id:"med1",ic:"🧘",g:"Бясалгал",t:w+10,dur:60,name:"Бясалгал 1/3",why:"1 цаг",must:true,med:true},
+    {id:"move",ic:"🏃",g:"Бие",t:ex,dur:20,name:"Дасгал",why:"20 мин",must:true},
+    {id:"study",ic:"📚",g:"LOCK IN",t:toMin("11:00"),dur:120,name:study,why:"Trade хичээл · 2 цаг",must:true,lock:true},
+    {id:"food",ic:"🍳",g:"Гэр",t:toMin("13:30"),name:"Хоол хийх",why:"18:00-оос өмнө",must:true},
+    {id:"med2",ic:"🧘",g:"Бясалгал",t:toMin("15:00"),dur:60,name:"Бясалгал 2/3",why:"1 цаг",must:true,med:true},
+    {id:"market",ic:"📈",g:"LOCK IN",t:toMin("16:00"),dur:120,name:market,why:"London · 2 цаг",must:true,lock:true},
+    {id:"clean",ic:"🧹",g:"Гэр",t:toMin("18:15"),name:"Гэр цэвэрлэх",why:"20 мин",must:true},
+    {id:"reward",ic:"🎬",g:"Шагнал",t:toMin("20:00"),dur:120,name:"Кино, тоглоом",why:"2 LOCK IN-ий дараа",reward:true},
+    {id:"med3",ic:"🧘",g:"Бясалгал",t:bed-60,dur:60,name:"Бясалгал 3/3",why:"1 цаг",must:true,med:true},
+    {id:"sleep",ic:"🌙",g:"Бие",t:bed,name:"Унтах",why:"7 цаг нойр",must:true}
   ]}
+function blocks(k){const d=days[k]||{},tm=d.tm||{};
+  const bs=baseBlocks(k).map(b=>tm[b.id]!=null?{...b,t:tm[b.id],moved:true}:b);
+  for(const x of d.extras||[])bs.push({id:"x:"+x.id,ic:"✦",g:"Жижиг ажил",t:x.t!=null?x.t:toMin("14:00"),name:x.title,extra:true,xid:x.id});
+  return bs.sort((a,b)=>a.t-b.t)}
 const locksLeft=(bs,d)=>bs.filter(b=>b.lock).some(b=>!d.done[b.id]);
 function isLate(b,d){return b.must&&!d.done[b.id]&&b.t<1440&&nowMin()>b.t+30}
 function lateNow(b,d){if(!isLate(b,d))return false;return nowMin()<b.t+(b.dur||0)+180}
@@ -441,10 +478,10 @@ async function run(b,dur){const o=OV(),end=Date.now()+dur*6e4,st=Date.now();try{
   const quit=h("button",{class:"btn",id:"lq",onclick:()=>{if(!armed){armed=true;warn.hidden=false;return}fin(b,Math.floor((Date.now()-st)/6e4),true)}},"Зогсоох");
   o.replaceChildren(h("div",{class:"ov"},h("div",{class:"k"},"LOCK IN"),h("h2",{},b.name),tm,warn,quit));
   const tick=()=>{const ms=end-Date.now();if(ms<=0){fin(b,dur,false);return}const s=Math.ceil(ms/1e3);tm.textContent=(s>=3600?Math.floor(s/3600)+":":"")+pad(Math.floor(s%3600/60))+":"+pad(s%60)};tick();lt=setInterval(tick,1e3)}
-function runMed(b){const o=OV();o.hidden=false;const end=Date.now()+10*6e4;const tm=h("div",{class:"tmr"}),lbl=h("p",{},"Амьсгал авах");
+function runMed(b){const o=OV();o.hidden=false;const end=Date.now()+(b.dur||10)*6e4;const tm=h("div",{class:"tmr"}),lbl=h("p",{},"Амьсгал авах");
   o.replaceChildren(h("div",{class:"ov"},h("div",{class:"k"},"Бясалгал"),tm,lbl,h("p",{},"4 сек амьсгал ав · 4 сек барь · 6 сек гарга"),h("button",{class:"btn",id:"medq",onclick:closeOv},"Зогсоох")));
   const tick=()=>{const ms=end-Date.now();if(ms<=0){clearInterval(lt);lt=null;beep();const d=getDay(todayKey());d.done[b.id]=true;saveDay(d);
-      o.replaceChildren(h("div",{class:"ov"},h("div",{class:"k"},"Дууслаа"),h("h2",{},"10 минут тайван байлаа"),h("button",{class:"btn s",id:"medok",onclick:closeOv},"Хаах")));return}
+      o.replaceChildren(h("div",{class:"ov"},h("div",{class:"k"},"Дууслаа"),h("h2",{},(b.dur||10)+" минут тайван байлаа"),h("button",{class:"btn s",id:"medok",onclick:closeOv},"Хаах")));return}
     const s=Math.ceil(ms/1e3);tm.textContent=pad(Math.floor(s/60))+":"+pad(s%60);const c=(600-s)%14;lbl.textContent=c<4?"Амьсгал ав":c<8?"Барь":"Гарга"};
   tick();lt=setInterval(tick,1e3)}
 function fin(b,mins,quit){clearInterval(lt);lt=null;try{wl?.release()}catch(e){}wl=null;beep();
@@ -490,7 +527,7 @@ function showAlarm(b,k){const o=OV();if(!o.hidden)return;o.hidden=false;startAla
       h("button",{class:"btn",id:"al-close",onclick:closeOv},"Хаах"))))}
 function checkAlarm(){if(!state)return;const n=nowMin();
   for(const[k,off]of[[todayKey(),0],[addDays(todayKey(),-1),1440]]){const d=getDay(k),bs=blocks(k);
-    for(const b of bs){const t=b.t-off;if(t<0||t>=1440||b.small)continue;const key=k+b.id;
+    for(const b of bs){const t=b.t-off;if(t<0||t>=1440)continue;const key=k+b.id;
       if(!rung.has(key)&&n>=t&&n<t+5&&!d.done[b.id]&&!(b.reward&&locksLeft(bs,d))){rung.add(key);showAlarm(b,k);return}}}}
 
 /* ---------- screen: ЗОРИЛГО ---------- */
@@ -598,12 +635,12 @@ function sheetGoal(){const rows=[["Одоо",100,10,"$10"],["Өөрийн дан
     h("div",{class:"sh-note"},"Мэргэжлийн трейдерүүд сард ",h("b",{},"2–5%")," олдог. Тиймээс $2,500 хүрэх гол түлхүүр бол ",h("b",{},"том данс"),", харин том данс авах түлхүүр бол ",h("b",{},"батлагдсан арга барил ба сахилга"),".")]}
 function sheetPlan(){const ph=[["10.17 – 11.15","Арга сурах","SiriusFx-ийн 29 бичлэг, өдөрт 1. Дүрмээ 1 хуудсанд бичнэ."],["11.16 – 12.20","Арга батлах ★","100 backtest + 20 demo trade. Дүрэм 90%+. Энэ бол DEADLINE."],["12.21 – 03.31","Жинхэнэ данс","$100 данс, trade бүрт 1% эрсдэл, 60 trade."],["04.01 – 09.30","Өсгөх","Анхны $1000 ашиг. Том данс авах бэлтгэл."],["2027 оны сүүл","$2,500/сар","Том дансаар сард 2.5%. 3 сар дараалан."]];
   return[h("div",{class:"sh-big"},h("b",{},"5")," шат, 1 чиглэл"),h("div",{class:"sh-tl"},ph.map((p,i)=>h("div",{class:"sh-tli"+(i===1?" key":"")},h("i"),h("div",{},h("span",{},p[0]),h("b",{},p[1]),h("p",{},p[2])))))]}
-function sheetStrategy(){const blocks=[[9.5,10,"Бос","var(--rule)"],[10,10.5,"Дасгал","var(--sage)"],[11,13,"LOCK IN · сурах","#F5C531"],[13,14,"Хоол","var(--rule)"],[16,18,"LOCK IN · зах","#F5C531"],[19,20,"Ном, бясалгал","var(--lav)"],[20,22,"Кино","var(--mint)"]];
-  const X=t=>20+(t-9)/16*280;
+function sheetStrategy(){const blocks=[[7,7.15,"Бос","var(--sage)"],[7.17,8.17,"Бясалгал","var(--lav)"],[8.33,8.67,"Дасгал","var(--sage)"],[11,13,"LOCK IN · сурах","#F5C531"],[13.5,14,"Хоол","var(--blush)"],[15,16,"Бясалгал","var(--lav)"],[16,18,"LOCK IN · зах","#F5C531"],[18.25,18.6,"Цэвэрлэх","var(--blush)"],[20,22,"Кино","var(--mint)"],[23,24,"Бясалгал","var(--lav)"]];
+  const X=t=>20+(t-7)/17*280;
   const fig=`<svg viewBox="0 0 320 92"><rect x="20" y="22" width="280" height="30" rx="8" fill="var(--tint)"/>${blocks.map(b=>`<rect x="${X(b[0]).toFixed(1)}" y="22" width="${(X(b[1])-X(b[0])).toFixed(1)}" height="30" rx="5" fill="${b[3]}"/>`).join("")}
-   ${[9,11,13,16,18,20,22,25].map(t=>`<text x="${X(t).toFixed(1)}" y="68" text-anchor="middle" font-family="Manrope,sans-serif" font-size="8.5" font-weight="700" fill="var(--soft)">${String(t%24).padStart(2,"0")}:00</text>`).join("")}
+   ${[7,11,13,16,18,20,24].map(t=>`<text x="${X(t).toFixed(1)}" y="68" text-anchor="middle" font-family="Manrope,sans-serif" font-size="8.5" font-weight="700" fill="var(--soft)">${String(t%24).padStart(2,"0")}:00</text>`).join("")}
    <text x="${X(12)}" y="14" text-anchor="middle" font-family="Manrope,sans-serif" font-size="9" font-weight="800" fill="var(--ink)">LOCK IN</text><text x="${X(17)}" y="14" text-anchor="middle" font-family="Manrope,sans-serif" font-size="9" font-weight="800" fill="var(--ink)">LOCK IN</text>
-   <text x="${X(23.5)}" y="86" text-anchor="middle" font-family="Manrope,sans-serif" font-size="8.5" font-weight="700" fill="var(--soft)">унтах</text></svg>`;
+   <text x="${X(24)}" y="86" text-anchor="middle" font-family="Manrope,sans-serif" font-size="8.5" font-weight="700" fill="var(--soft)">унтах</text></svg>`;
   return[h("div",{class:"sh-big"},"Өдөрт ",h("b",{},"2 LOCK IN")),svgEl(fig),
     h("div",{class:"sh-cap"},"Арилжааны стратеги"),
     h("ul",{class:"sh-check"},["Зөвхөн SiriusFx-ийн setup-аар орно","Trade бүрт 1% эрсдэл","Эрсдэл : ашиг ≥ 1 : 2","Өдөрт 3-аас ихгүй trade","2 удаа алдвал тэр өдөр зогсоно","Зөвхөн London цагт (16:00–18:00)"].map(t=>h("li",{},t))),
@@ -670,36 +707,41 @@ function viewTC(){if(!tc)return h("div",{class:"tc"},h("div",{class:"k"},"Trade 
     h("div",{class:"dsc"},h("div",{},h("b",{class:(w.okPct!=null&&w.okPct<90)?"bad":""},pc(w.okPct)),h("span",{},"Дүрэм · 7 хоног")),h("div",{},h("b",{},w.trades||0),h("span",{},"Trade · 7 хоног")),h("div",{},h("b",{class:(a.okPct!=null&&a.okPct<90)?"bad":""},pc(a.okPct)),h("span",{},"Дүрэм · нийт"))),
     tc.verdict?h("p",{class:"verdict"},tc.verdict):null)}
 /* ---------- screen: ӨНӨӨДӨР ---------- */
+const GC={"LOCK IN":"var(--butter)","Бясалгал":"var(--lav)","Бие":"var(--sage)","Гэр":"var(--blush)","Шагнал":"var(--mint)","Жижиг ажил":"var(--rule)"};
+function slotNow(){const n=nowMin()+30;return fromMin(Math.min(toMin("23:30"),Math.ceil(n/30)*30))}
 function viewToday(){const k=todayKey(),d=getDay(k),bs=blocks(k),n=nowBlock(bs,d),lk=locksLeft(bs,d),out=[];
-  const na=nextAlarm(bs,d);
-  if(na){const mins=na.t-nowMin();out.push(h("div",{class:"alarm"},h("span",{class:"bell"},"САНУУЛГА"),
-    h("div",{},h("strong",{},fromMin(na.t)+" · "+na.name),h("small",{},ls("li_pushcode")?"Апп хаалттай байсан ч мэдэгдэл ирнэ":"Апп нээлттэй байхад дуугарна")),h("span",{class:"in"},mins>=60?Math.floor(mins/60)+"ц "+mins%60+"м":mins+"м")))}
   {const pb=pushBox();if(pb)out.push(pb)}
   if(!soundOn()||(!ls("li_pushcode")&&"PushManager" in window))out.push(h("button",{class:"btn s",id:"snd",style:"width:100%;margin-bottom:12px",onclick:enableSound},soundOn()?"🔔 Хаалттай үед ч дуугаргах":"🔔 Дуут сануулга асаах"));
-  if(n){const b=n.b;
-    if(b.reward)out.push(h("section",{class:"box now"+(lk?"":" calm")},h("div",{class:"k"},lk?"ТҮГЖЭЭТЭЙ":"НЭЭЛТТЭЙ"),h("h2",{},lk?"Кино түгжээтэй":"Кино, тоглоом таных"),h("p",{},lk?"LOCK IN дутуу байна. Эхлээд нөх.":"Чи үүнийг олж авлаа."),
-      lk?h("div",{class:"btns"},h("button",{class:"btn i",id:"fix",onclick:()=>openLock(bs.find(x=>x.lock&&!d.done[x.id]))},"Одоо нөхөх")):null));
-    else out.push(h("section",{class:"box now"+(n.late?"":n.next?" calm":"")},h("div",{class:"k"},(n.late?"Хоцорсон":n.next?"Дараагийнх":"Одоо")+" · "+fromMin(b.t)),
-      h("h2",{},b.lock?"LOCK IN · "+b.name:b.name),h("p",{},b.why),
-      b.small?null:h("div",{class:"btns"},b.lock?h("button",{class:"btn i",id:"nlock",onclick:()=>openLock(b)},"LOCK IN эхлэх"):b.med?h("button",{class:"btn i",id:"nmed",onclick:()=>openLock(b)},"Бясалгал эхлэх"):null,h("button",{class:"btn"+(b.lock||b.med?"":" i"),id:"ndone",onclick:()=>toggle(b.id)},"Хийсэн"))))}
-  else out.push(h("section",{class:"box now calm"},h("h2",{},"Өнөөдрийнх дууслаа"),h("p",{},"Унт. Маргааш дахиад.")));
-  const card=b=>{const done=!!d.done[b.id];
-    if(b.reward)return h("div",{class:"hb rew"+(n&&n.b===b?" isnow":"")},h("span",{class:"tm"},fromMin(b.t)),h("div",{class:"tx"},h("span",{class:"tag"},b.g),h("b",{},b.name),h("span",{class:"pill "+(lk?"off":"on")},lk?"2 LOCK IN дуусаагүй":"Нээлттэй")),h("span"));
-    const tx=h("div",{class:"tx"},h("span",{class:"tag"},b.g),h("b",{},b.name),h("small",{},b.why));
-    if(b.small){tx.append(h("div",{class:"exl"},(d.extras||[]).map(x=>h("div",{class:"ex"+(x.done?" d":"")},
-        h("button",{class:"m",id:"exd-"+x.id,"aria-label":"Хийсэн",onclick:()=>{const dd=getDay(k);const e=dd.extras.find(y=>y.id===x.id);e.done=!e.done;saveDay(dd);render()}},x.done?"✓":""),
-        h("span",{},x.title),h("button",{class:"rm",id:"exr-"+x.id,"aria-label":"Устгах",onclick:()=>{const dd=getDay(k);dd.extras=dd.extras.filter(y=>y.id!==x.id);saveDay(dd);render()}},"×")))));
-      const inp=h("input",{type:"text",id:"exin",placeholder:"Жишээ: банк явах",enterkeyhint:"done"});
-      const add=()=>{const v=inp.value.trim();if(!v)return;inp.value="";inp.blur();const dd=getDay(k);(dd.extras||=[]).push({id:uid(),title:v,done:false});saveDay(dd);render()};
-      inp.addEventListener("keydown",e=>{if(e.key==="Enter")add()});tx.append(h("div",{class:"adx"},inp,h("button",{id:"exadd",onclick:add},"+")));
-      return h("div",{class:"hb"+(n&&n.b===b?" isnow":"")},h("span",{class:"tm"},fromMin(b.t)),tx,h("span"))}
-    return h("div",{class:"hb"+(b.lock?" lock":"")+(done?" done":"")+(isLate(b,d)?" late":"")+(n&&n.b===b?" isnow":"")},h("span",{class:"tm"},fromMin(b.t)),tx,
-      h("button",{class:"ck",id:"ck-"+b.id,"aria-label":(done?"Болиулах: ":"Хийсэн: ")+b.name,onclick:()=>toggle(b.id)},done?"✓":""))};
-  const parts=[["Өглөө",b=>b.t<toMin("12:00")],["Өдөр",b=>b.t>=toMin("12:00")&&b.t<toMin("18:00")],["Орой",b=>b.t>=toMin("18:00")]];
-  parts.forEach(([nm,f])=>{const list=bs.filter(f);if(!list.length)return;const m=list.filter(b=>b.must),md=m.filter(b=>d.done[b.id]).length;
-    out.push(h("div",{class:"part"},h("h3",{},h("span",{},nm),h("span",{class:"num"},m.length?md+"/"+m.length:"")),list.map(card)))});
-  out.push(h("div",{class:"note"},"Бүх зуршил ЗААВАЛ. Цаг нь болоход апп дуугарна."));
-  return out}
+  const must=bs.filter(b=>b.must),md=must.filter(b=>d.done[b.id]).length,locks=bs.filter(b=>b.lock),ld=locks.filter(b=>d.done[b.id]).length;
+  out.push(h("div",{class:"stats"},
+    h("div",{class:"stc"},h("span",{class:"l"},"Заавал"),h("b",{},md,h("em",{},"/"+must.length)),h("div",{class:"seg"},must.map(b=>h("i",{class:d.done[b.id]?"on":""})))),
+    h("div",{class:"stc"},h("span",{class:"l"},"LOCK IN"),h("b",{},ld,h("em",{},"/"+locks.length)),h("div",{class:"seg y"},locks.map(b=>h("i",{class:d.done[b.id]?"on":""}))))));
+  if(n&&!(n.b.reward&&!lk)){const b=n.b;out.push(h("div",{class:"nowbar"+(n.late?" late":"")},
+    h("span",{class:"ic",style:"background:"+(GC[b.g]||"var(--tint)")},b.ic||"•"),
+    h("div",{class:"tx"},h("small",{},(n.late?"Хоцорсон":n.next?"Дараагийнх":"Одоо")+" · "+fromMin(b.t)),h("b",{},b.reward?"Кино түгжээтэй · LOCK IN дутуу":b.name)),
+    b.reward?h("button",{class:"go",id:"fix",onclick:()=>openLock(bs.find(x=>x.lock&&!d.done[x.id]))},"Нөхөх")
+      :b.lock||b.med?h("button",{class:"go",id:"nlock",onclick:()=>openLock(b)},b.med?"Эхлэх":"LOCK IN")
+      :h("button",{class:"go",id:"ndone",onclick:()=>toggle(b.id)},"Хийсэн")))}
+  const row=b=>{const done=!!d.done[b.id];
+    const ti=h("input",{type:"time",class:"tmi",id:"tm-"+b.id,value:fromMin(b.t),"aria-label":"Цаг өөрчлөх: "+b.name});
+    ti.addEventListener("change",()=>{if(!ti.value)return;let m=toMin(ti.value);if(b.id!=="wake"&&m<wakeMin(k)-60)m+=1440;ti.blur();
+      const dd=getDay(k);if(b.extra){const x=(dd.extras||[]).find(y=>y.id===b.xid);if(x)x.t=m}else(dd.tm||={})[b.id]=m;saveDay(dd);rung.delete(k+b.id);toast("Цаг өөрчлөгдлөө · "+fromMin(m));render()});
+    return h("div",{class:"row"+(done?" done":"")+(n&&n.b===b?" cur":"")+(isLate(b,d)?" lt":"")},
+      h("button",{class:"ic",style:"background:"+(GC[b.g]||"var(--tint)"),id:"ic-"+b.id,"aria-label":b.name,onclick:()=>{if(b.lock||b.med)openLock(b)}},b.ic||"•"),
+      h("div",{class:"tx"},h("b",{},b.name),h("small",{},[b.g,b.why,b.moved?"цаг өөрчилсөн":null,b.reward?(lk?"🔒 түгжээтэй":"нээлттэй"):null].filter(Boolean).join(" · "))),
+      h("label",{class:"tmb"},fromMin(b.t),ti),
+      b.reward?h("span",{class:"ck2 off"}):h("button",{class:"ck2",id:"ck-"+b.id,"aria-label":(done?"Болиулах: ":"Хийсэн: ")+b.name,onclick:()=>toggle(b.id)},done?"✓":""),
+      b.extra?h("button",{class:"rm",id:"rm-"+b.xid,"aria-label":"Устгах",onclick:()=>{const dd=getDay(k);dd.extras=(dd.extras||[]).filter(y=>y.id!==b.xid);saveDay(dd);render()}},"×"):null)};
+  const inp=h("input",{type:"text",id:"exin",placeholder:"Жижиг ажил нэмэх…",enterkeyhint:"done"}),tIn=h("input",{type:"time",class:"tmi",id:"exti",value:slotNow(),"aria-label":"Цаг"}),tLb=h("label",{class:"tmb"},tIn.value,tIn);tIn.addEventListener("change",()=>{tLb.firstChild.textContent=tIn.value||"--:--"});
+  const add=()=>{const v=inp.value.trim();if(!v){inp.focus();return}inp.value="";inp.blur();let m=toMin(tIn.value||"14:00");if(m<wakeMin(k)-60)m+=1440;const dd=getDay(k);(dd.extras||=[]).push({id:uid(),title:v,t:m});saveDay(dd);render()};
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")add()});
+  out.push(h("section",{class:"list"},
+    h("div",{class:"lh"},h("h3",{},"Өнөөдөр"),h("span",{},dot(k))),
+    h("div",{class:"bar"},bs.filter(b=>!b.reward).map(b=>h("i",{style:"background:"+(GC[b.g]||"var(--tint)")+(d.done[b.id]?"":";filter:saturate(.5);opacity:.45")}))),
+    ...bs.map(row),
+    h("div",{class:"addrow"},inp,tLb,h("button",{id:"exadd","aria-label":"Нэмэх",onclick:add},"+"))));
+  out.push(h("p",{class:"hint2"},"Цаг дээр дарж өөрчилнө · өөрчлөлт зөвхөн өнөөдөрт"));
+  return[h("div",{class:"td"},...out)]}
 
 function render(){if(!state)return;const a=document.activeElement;if(a&&a.tagName==="INPUT"&&a.value)return;
   clockD=clockT=null;
